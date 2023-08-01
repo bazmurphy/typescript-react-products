@@ -76,6 +76,7 @@ type ChildrenType = { children?: ReactElement | ReactElement[] };
 
 // we create the Provider, it takes in children, and it returns a ReactElement
 export const ProductsProvider = ({ children }: ChildrenType): ReactElement => {
+  // eslint-disable-next-line
   const [products, setProducts] = useState<ProductType[]>(initialState);
 
   // if we wanted to switch to live data(3)
