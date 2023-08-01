@@ -1,0 +1,91 @@
+import { createContext, ReactElement, useState, useEffect } from "react";
+
+// define a type to mirror the data from products.json
+export type ProductType = {
+  sku: string;
+  name: string;
+  price: number;
+};
+
+const initialState: ProductType[] = [];
+
+// we can use that to define the initial state
+// const initialState: ProductType[] = [
+//   {
+//     sku: "item0001",
+//     name: "Item 1",
+//     price: 9.99,
+//   },
+//   {
+//     sku: "item0002",
+//     name: "Item 2",
+//     price: 19.99,
+//   },
+//   {
+//     sku: "item0003",
+//     name: "Item 3",
+//     price: 29.99,
+//   },
+// ];
+
+// define a type for the initial Context State
+export type UseProductsContextType = { products: ProductType[] };
+
+// we can use that to define the initial Context State
+const initialContextState: UseProductsContextType = { products: [] };
+
+// create the Products Context (using the type defined above) and set its initial state
+const ProductsContext =
+  createContext<UseProductsContextType>(initialContextState);
+
+// create a children type, because we need to provide the children type when we create a context (in React 18+)(before that it was implicit)
+type ChildrenType = { children?: ReactElement | ReactElement[] };
+
+// the children
+// it is not the same as a Prop that is being passed down and used
+// it is something that you put in a Component between the opening and closing JSX tags
+// although it is a prop, it is just not provided in the same way
+
+// we create the Provider, it takes in children, and it returns a ReactElement
+export const ProductsProvider = ({ children }: ChildrenType): ReactElement => {
+  const [products, setProducts] = useState<ProductType[]>(initialState);
+
+  useEffect(() => {
+    // Promise Chain [A]
+    // const fetchProducts = async (): Promise<ProductType[]> => {
+    //   const data = await fetch("http://localhost:3000/products")
+    //     .then((response) => {
+    //       return response.json();
+    //     })
+    //     .catch((error) => {
+    //       if (error instanceof Error) {
+    //         console.log(error.message);
+    //       }
+    //     });
+    //   return data;
+    // };
+    // fetchProducts().then((products) => setProducts(products));
+
+    // Try Catch [B]
+    const fetchProducts = async (): Promise<void> => {
+      try {
+        const response = await fetch("http://localhost:4000/products");
+        const data: ProductType[] = await response.json();
+        setProducts(data);
+      } catch (error) {
+        console.error(error);
+        throw error;
+      }
+    };
+    fetchProducts();
+  }, []);
+
+  // we wrap the children in the Provider and we set the value to the "products" state from above
+  return (
+    <ProductsContext.Provider value={{ products }}>
+      {children}
+    </ProductsContext.Provider>
+  );
+};
+
+export default ProductsContext;
