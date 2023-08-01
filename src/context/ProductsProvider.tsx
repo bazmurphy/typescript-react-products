@@ -1,6 +1,7 @@
-import { createContext, ReactElement, useState } from "react";
+import { createContext, ReactElement } from "react";
+
 // if we want to switch to live data(1)
-// import { useEffect } from "react";
+// import { useState, useEffect } from "react";
 
 // define a type to mirror the data from products.json
 export type ProductType = {
@@ -10,7 +11,7 @@ export type ProductType = {
 };
 
 // we can use that to define the initial state
-const initialState: ProductType[] = [
+const initialProductsState: ProductType[] = [
   {
     sku: "item0001",
     name: "Bao Buns",
@@ -53,7 +54,7 @@ const initialState: ProductType[] = [
   },
 ];
 
-// if we wanted to switch to live data(2):
+// if we want to switch to live data(2)
 // const initialState: ProductType[] = [];
 
 // define a type for the initial Context State
@@ -76,14 +77,15 @@ type ChildrenType = { children?: ReactElement | ReactElement[] };
 
 // we create the Provider, it takes in children, and it returns a ReactElement
 export const ProductsProvider = ({ children }: ChildrenType): ReactElement => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [products, setProducts] = useState<ProductType[]>(initialState);
+  const products = initialProductsState;
 
-  // if we wanted to switch to live data(3)
+  // if we want to switch to live data(3)
+  // const [products, setProducts] = useState<ProductType[]>(initialState);
+
   // useEffect(() => {
   //   // Promise Chain [A]
   //   const fetchProducts = async (): Promise<ProductType[]> => {
-  //     const data = await fetch("http://localhost:3000/products")
+  //     const data = await fetch("http://localhost:4000/products")
   //       .then((response) => {
   //         return response.json();
   //       })
@@ -95,6 +97,7 @@ export const ProductsProvider = ({ children }: ChildrenType): ReactElement => {
   //     return data;
   //   };
   //   fetchProducts().then((products) => setProducts(products));
+
   //   // Try Catch [B]
   //   const fetchProducts = async (): Promise<void> => {
   //     try {
@@ -106,6 +109,7 @@ export const ProductsProvider = ({ children }: ChildrenType): ReactElement => {
   //       throw error;
   //     }
   //   };
+
   //   fetchProducts();
   // }, []);
 
