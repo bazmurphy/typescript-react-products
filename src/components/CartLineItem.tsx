@@ -19,7 +19,6 @@ const CartLineItem = ({
   // using the new URL object
   const image: string = new URL(`../images/${item.sku}.webp`, import.meta.url)
     .href;
-  console.log(image);
 
   const lineTotal: number = item.qty * item.price;
 

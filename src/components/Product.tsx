@@ -23,7 +23,6 @@ const Product = ({
     `../images/${product.sku}.webp`,
     import.meta.url
   ).href;
-  console.log(image);
 
   const onAddToCart = () => {
     // send a dispatch, with the type "ADD" and the payload of the product and the qty (although its not neccessary and could be an optional property)
