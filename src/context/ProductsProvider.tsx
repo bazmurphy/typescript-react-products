@@ -1,4 +1,6 @@
-import { createContext, ReactElement, useState, useEffect } from "react";
+import { createContext, ReactElement, useState } from "react";
+// if we want to switch to live data(1)
+// import { useEffect } from "react";
 
 // define a type to mirror the data from products.json
 export type ProductType = {
@@ -7,26 +9,52 @@ export type ProductType = {
   price: number;
 };
 
-const initialState: ProductType[] = [];
-
 // we can use that to define the initial state
-// const initialState: ProductType[] = [
-//   {
-//     sku: "item0001",
-//     name: "Item 1",
-//     price: 9.99,
-//   },
-//   {
-//     sku: "item0002",
-//     name: "Item 2",
-//     price: 19.99,
-//   },
-//   {
-//     sku: "item0003",
-//     name: "Item 3",
-//     price: 29.99,
-//   },
-// ];
+const initialState: ProductType[] = [
+  {
+    sku: "item0001",
+    name: "Bao Buns",
+    price: 1.99,
+  },
+  {
+    sku: "item0002",
+    name: "Dragon Fruit Lollies",
+    price: 2.49,
+  },
+  {
+    sku: "item0003",
+    name: "Gyoza Dumplings",
+    price: 2.99,
+  },
+  {
+    sku: "item0004",
+    name: "Kombucha Green Tea",
+    price: 1.79,
+  },
+  {
+    sku: "item0005",
+    name: "Mango & Coconut Sorbet",
+    price: 1.99,
+  },
+  {
+    sku: "item0006",
+    name: "Mini Duck Spring Rolls",
+    price: 2.25,
+  },
+  {
+    sku: "item0007",
+    name: "Frozen Stir Fry Vegetables",
+    price: 2.29,
+  },
+  {
+    sku: "item0008",
+    name: "Sweet Chilli Sauce",
+    price: 1.29,
+  },
+];
+
+// if we wanted to switch to live data(2):
+// const initialState: ProductType[] = [];
 
 // define a type for the initial Context State
 export type UseProductsContextType = { products: ProductType[] };
@@ -50,35 +78,35 @@ type ChildrenType = { children?: ReactElement | ReactElement[] };
 export const ProductsProvider = ({ children }: ChildrenType): ReactElement => {
   const [products, setProducts] = useState<ProductType[]>(initialState);
 
-  useEffect(() => {
-    // Promise Chain [A]
-    // const fetchProducts = async (): Promise<ProductType[]> => {
-    //   const data = await fetch("http://localhost:3000/products")
-    //     .then((response) => {
-    //       return response.json();
-    //     })
-    //     .catch((error) => {
-    //       if (error instanceof Error) {
-    //         console.log(error.message);
-    //       }
-    //     });
-    //   return data;
-    // };
-    // fetchProducts().then((products) => setProducts(products));
-
-    // Try Catch [B]
-    const fetchProducts = async (): Promise<void> => {
-      try {
-        const response = await fetch("http://localhost:4000/products");
-        const data: ProductType[] = await response.json();
-        setProducts(data);
-      } catch (error) {
-        console.error(error);
-        throw error;
-      }
-    };
-    fetchProducts();
-  }, []);
+  // if we wanted to switch to live data(3)
+  // useEffect(() => {
+  //   // Promise Chain [A]
+  //   const fetchProducts = async (): Promise<ProductType[]> => {
+  //     const data = await fetch("http://localhost:3000/products")
+  //       .then((response) => {
+  //         return response.json();
+  //       })
+  //       .catch((error) => {
+  //         if (error instanceof Error) {
+  //           console.log(error.message);
+  //         }
+  //       });
+  //     return data;
+  //   };
+  //   fetchProducts().then((products) => setProducts(products));
+  //   // Try Catch [B]
+  //   const fetchProducts = async (): Promise<void> => {
+  //     try {
+  //       const response = await fetch("http://localhost:4000/products");
+  //       const data: ProductType[] = await response.json();
+  //       setProducts(data);
+  //     } catch (error) {
+  //       console.error(error);
+  //       throw error;
+  //     }
+  //   };
+  //   fetchProducts();
+  // }, []);
 
   // we wrap the children in the Provider and we set the value to the "products" state from above
   return (
