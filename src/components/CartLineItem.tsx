@@ -3,7 +3,7 @@ import {
   ReducerAction,
   ReducerActionType,
 } from "../context/CartProvider";
-import { ChangeEvent, ReactElement } from "react";
+import { ChangeEvent, ReactElement, memo } from "react";
 
 type CartLineItemPropsType = {
   item: CartItemType;
@@ -93,4 +93,33 @@ const CartLineItem = ({
   return content;
 };
 
-export default CartLineItem;
+// ForPerformance Optimisation we can memoize the Functional Component
+
+// the CartLineItem will always be a new object that is created, so it will never have Referential Equality
+// "dispatch" already has Referential Equality
+// REDUCER_ACTIONS we Memoised with useMemo
+// but the "item" object is the problem...
+// therefore we need to create a function to compare them
+const areItemsEqual = (
+  { item: prevItem }: CartLineItemPropsType,
+  { item: nextItem }: CartLineItemPropsType
+) => {
+  return Object.keys(prevItem).every((key) => {
+    // compare every key
+    // return prevItem[key] === nextItem[key]
+    // but TypeScript doesn't like that^ so we need to use an Assertion :
+    return (
+      prevItem[key as keyof CartItemType] ===
+      nextItem[key as keyof CartItemType]
+    );
+  });
+};
+
+// memo accepts the CartLineItem as the first argument, and the comparison function "areItemsEqual" as the second argument
+const MemoizedCartLineItem = memo<typeof CartLineItem>(
+  CartLineItem,
+  areItemsEqual
+);
+
+// now when we change the quantity of one of the CartLineItems only that one will re-render, and the others will not re-render
+export default MemoizedCartLineItem;
